@@ -9,7 +9,7 @@ namespace ParallelMultiplication
         public static void Main()
         {
             Console.WriteLine("Matrix muliplication program");
-            Console.WriteLine("Choose an option:\n 1. Read two matrixes from files \n2. Generate random matrixed");
+            Console.WriteLine("Choose an option:\n1. Read two matrices from files \n2. Generate random matrices \n3. Run performance tests with random matrices");
             Console.WriteLine("Enter an option: ");
             string option = Console.ReadLine();
 
@@ -71,6 +71,28 @@ namespace ParallelMultiplication
                     second.WriteToFile(filePath);
                     break;
 
+                case "3":
+                    Console.WriteLine("Enter sizes of matrices: ");
+                    string[] sizes = Console.ReadLine().Split();
+                    int[] sizesInt = new int[sizes.Length];
+                    for (int i = 0; i < sizes.Length; i++)
+                    {
+                        sizesInt[i] = int.Parse(sizes[i]);
+                    }
+
+                    Console.WriteLine("Enter number of tests: ");
+                    string numberOfTests = Console.ReadLine();
+
+                    try
+                    {
+                        Matrix.RunTests(sizesInt, int.Parse(numberOfTests));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                    }
+                    return;
+                    break;
                 default:
                     Console.WriteLine("Incorrect number of option");
                     break;
