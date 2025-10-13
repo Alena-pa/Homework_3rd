@@ -20,6 +20,7 @@ namespace ParallelMultiplication
             {
                 throw new ArgumentException("Matrix dimensions must be positive");
             }
+
             Rows = rows;
             Columns = columns;
             numbers = new int[rows, columns];
