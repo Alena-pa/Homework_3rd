@@ -7,13 +7,26 @@ using ILazy;
 
 namespace LazyCalculation;
 
+/// <summary>
+/// Multi threaded implementation of the ILazy interface.
+/// </summary>
+/// <typeparam name="T">Type of the computed value</typeparam>
 public class MultiThreaded<T> : ILazy<T>
 {
-    private Func<T> _supplier;
+    private Func<T>?supplier;
     private T value;
     private bool isEvaluated;
-    private readonly Lock _lock = new();
+    private readonly Lock locker = new();
 
+    public MultiThreaded(Func<T> supplier)
+    {
+        this.supplier = supplier ?? throw new ArgumentNullException(nameof(supplier));
+    }
+
+    /// <summary>
+    /// Returns the lazily evaluated value
+    /// </summary>
+    /// <returns>The computed value</returns>
     public T Get()
     {
         if (isEvaluated)
@@ -21,13 +34,13 @@ public class MultiThreaded<T> : ILazy<T>
             return value;
         }
 
-        lock (_lock)
+        lock (locker)
         {
             if (!isEvaluated)
             {
-                value = _supplier();
+                value = supplier();
                 isEvaluated = true;
-                _supplier = null;
+                supplier = null;
             }
         }
 

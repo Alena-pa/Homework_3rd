@@ -7,17 +7,25 @@ using System;
 
 namespace LazyCalculation;
 
+/// <summary>
+/// Single threaded implementation of the ILazy interface
+/// </summary>
+/// <typeparam name="T">Type of the computed value</typeparam>
 public class SingleThreaded<T> : ILazy<T>
 {
-    private Func<T> _supplier;
+    private Func<T>? supplier;
     private T value;
     private bool isEvaluared;
 
     public SingleThreaded(Func<T> supplier)
     {
-        _supplier = supplier ?? throw new ArgumentNullException(nameof(supplier)); 
+        this.supplier = supplier ?? throw new ArgumentNullException(nameof(supplier)); 
     }
 
+    /// <summary>
+    /// Returns the lazily evaluated value
+    /// </summary>
+    /// <returns>The computed value</returns>
     public T Get()
     {
         if (isEvaluared)
@@ -25,13 +33,13 @@ public class SingleThreaded<T> : ILazy<T>
             return value;
         }
 
-        if (_supplier != null)
+        if (supplier != null)
         {
-            value = _supplier();
+            value = supplier();
             isEvaluared = true;
         }
 
-        _supplier = null;
+        supplier = null;
 
         return value;
     }
