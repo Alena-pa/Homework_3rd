@@ -16,7 +16,7 @@ public class MultiThreaded<T> : ILazy<T>
     private Func<T>?supplier;
     private T value;
     private bool isEvaluated;
-    private readonly Lock locker = new();
+    private readonly object locker = new();
 
     public MultiThreaded(Func<T> supplier)
     {
