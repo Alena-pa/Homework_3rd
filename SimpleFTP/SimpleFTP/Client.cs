@@ -14,7 +14,7 @@ public class Client
     private readonly StreamWriter writer;
     private readonly StreamReader reader;
 
-    public Client(int port, string ip)
+    public void Start(int port, string ip)
     {
         client = new TcpClient(ip, port);
         stream = client.GetStream();
@@ -33,7 +33,7 @@ public class Client
         await writer.WriteLineAsync($"2 {path}");
 
         string size = await reader.ReadLineAsync();
-        if (!long.TryParse(size, out long size))
+        if (!long.TryParse(size, out size))
         {
             throw new InvalidDataException("Invalid size");
         }

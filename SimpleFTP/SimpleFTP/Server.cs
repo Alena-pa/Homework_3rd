@@ -13,18 +13,17 @@ public class Server(int port)
     private readonly int port = port;
     public static Start()
     {
-        var listener = new TcpListener(IPAddress.Any, port);
+        using var listener = new TcpListener(IPAddress.Any, port);
         listener.Start();
         while (true)
         {
             var socket = await listener.AcceptSocketAsync();
             Task.Run(async () =>
             {
-                var stream = new NetworkStream(socket);
-                var reader = new StreamReader(stream);
-                var writer = new StreamWriter(stream);
 
-                socket.Close();
+                await using var stream = new NetworkStream(socket);
+                using var reader = new StreamReader(stream);
+                await using var writer = new StreamWriter(stream);
             });
         }
     }
